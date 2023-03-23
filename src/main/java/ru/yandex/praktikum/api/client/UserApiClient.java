@@ -8,11 +8,15 @@ import java.net.HttpURLConnection;
 
 public class UserApiClient extends RestAssuredClient {
 
+    public static final String ENDPOINT_REGISTER = "/auth/register";
+    public static final String ENDPOINT_LOGIN = "/auth/login";
+    public static final String ENDPOINT_USER = "/auth/user";
+
     @Step("Отправка запроса на создание пользователя POST /api/auth/register | Почта = {body.email} Пароль = {body.password} Имя = {body.name}")
     public Response createUser(UserReqJson body) {
         Response response = reqSpec
                 .body(body)
-                .post("/auth/register");
+                .post(ENDPOINT_REGISTER);
         extractToken(response);
         return response;
     }
@@ -21,7 +25,7 @@ public class UserApiClient extends RestAssuredClient {
     public Response authorization(UserReqJson body) {
         Response response = reqSpec
                 .body(body)
-                .post("/auth/login");
+                .post(ENDPOINT_LOGIN);
         extractToken(response);
         return response;
     }
@@ -31,13 +35,13 @@ public class UserApiClient extends RestAssuredClient {
         return reqSpec
                 .header("Authorization", RestAssuredClient.getToken())
                 .body(body)
-                .patch("/auth/user");
+                .patch(ENDPOINT_USER);
     }
 
     @Step("Отправка запроса на удаление пользователя DELETE /api/auth/user")
     public void deleteUser() {
         reqSpec.header("Authorization", RestAssuredClient.getToken())
-                .delete("/auth/user");
+                .delete(ENDPOINT_USER);
     }
 
     public void clearToken() {
@@ -51,6 +55,17 @@ public class UserApiClient extends RestAssuredClient {
             RestAssuredClient.setToken(token);
         } else {
             clearToken();
+        }
+    }
+
+    @Step("Удаление аккаунта, если он был создан")
+    public static void deleteUserAccount(UserReqJson userReqJson) {
+        UserApiClient userApiClient = new UserApiClient();
+        Response responseAuth = userApiClient.authorization(userReqJson);
+        if (responseAuth.statusCode() == HttpURLConnection.HTTP_OK) {
+            userApiClient.deleteUser();
+        } else {
+            System.out.println("Пользователь создан не был");
         }
     }
 }

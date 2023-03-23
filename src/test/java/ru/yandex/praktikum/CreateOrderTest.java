@@ -109,7 +109,7 @@ public class CreateOrderTest {
 
     @After
     public void tearDown(){
-        GenerateData.deleteUserAccount(userReqJson);
+        UserApiClient.deleteUserAccount(userReqJson);
     }
 
 }

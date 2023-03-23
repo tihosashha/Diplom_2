@@ -63,6 +63,6 @@ public class GetUserOrderTest {
 
     @After
     public void tearDown() {
-        GenerateData.deleteUserAccount(userReqJson);
+        UserApiClient.deleteUserAccount(userReqJson);
     }
 }

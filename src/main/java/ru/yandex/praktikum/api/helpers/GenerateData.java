@@ -37,15 +37,4 @@ public class GenerateData {
     public static String generateName() {
         return name = faker.name().username();
     }
-
-    @Step("Удаление аккаунта, если он был создан")
-    public static void deleteUserAccount(UserReqJson userReqJson) {
-        UserApiClient userApiClient = new UserApiClient();
-        Response responseAuth = userApiClient.authorization(userReqJson);
-        if (responseAuth.statusCode() == HttpURLConnection.HTTP_OK) {
-            userApiClient.deleteUser();
-        } else {
-            System.out.println("Пользователь создан не был");
-        }
-    }
 }

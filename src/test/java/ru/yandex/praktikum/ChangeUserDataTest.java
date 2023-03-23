@@ -88,6 +88,6 @@ public class ChangeUserDataTest {
 
     @After
     public void tearDown() {
-        GenerateData.deleteUserAccount(userReqJson);
+        UserApiClient.deleteUserAccount(userReqJson);
     }
 }

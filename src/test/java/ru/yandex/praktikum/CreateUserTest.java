@@ -97,6 +97,6 @@ public class CreateUserTest {
 
     @After
     public void tearDown(){
-        GenerateData.deleteUserAccount(userReqJson);
+        UserApiClient.deleteUserAccount(userReqJson);
     }
 }
